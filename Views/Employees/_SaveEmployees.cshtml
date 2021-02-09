@@ -1,0 +1,89 @@
+﻿@model RightOneCRM.Models.Employees
+<!-- The Modal -->
+@using (Html.BeginForm("AddEmployees", "Employees", FormMethod.Post, new { @id = "EmployeesForm", enctype = "multipart/form-data" }))
+{
+    <div class="modal fade" id="mdlSaveEmployees" data-backdrop='static' data-keyboard='false'>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Employees Registration Form</h4>
+                    <button type="button" onclick="ClearEmployeesForm()" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div>
+                        @Html.HiddenFor(x=>x.CompanyID)
+                        <div class="form-group">
+                            @Html.LabelFor(x=>x.EmpName)
+                            @Html.TextBoxFor(x => x.EmpName, new { @class="form-control"})
+                            @Html.ValidationMessageFor(x => x.EmpName, "", new { @class="text-danger"})
+                        </div>
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <input type="submit" form="EmployeesForm" id="btnSaveEmployees" value="Save" class="btn btn-outline-primary" />
+                    <button type="button" onclick="ClearEmployeesForm()" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="~/Scripts/vendor/jquery-validation/jquery.validate.unobtrusive.min.js"></script>
+<!--Saving Admin -->
+<script>
+    $(document).ready(function () {
+        $('#mdlSaveEmployees').modal('show');
+        $('#EmployeesForm').submit(function (event) {
+            event.preventDefault();
+            var isValid = $(this).validate().form();
+            if (!isValid) return false;
+            else {
+                var formData = new FormData(document.getElementById("EmployeesForm"));
+                $.ajax({
+                    url: '/Employees/AddEmployees',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    beforeSend: function () {
+                        $("#btnSaveEmployees").attr('disabled', true);
+                        $("#btnSaveEmployees").html('Saving&nbsp <i class="fa fa-refresh fa-spin"></i>');
+                    },
+                    success: function (res) {
+                        $("#btnSaveEmployees").attr('disabled', false);
+                        $("#btnSaveEmployees").html('Save &nbsp<i class="fa fa-bookmark-o"></i>');
+                        $('#EmployeesForm')[0].reset();
+                        $('#mdlSaveEmployees').modal('hide');
+                        if (res == 1) {
+                            toastr.success('Employee Saved');
+
+                        }
+                        else if (res == 2) {
+                            toastr.success('Employee Updated');
+                        }
+                        else {
+                            toastr.error('Error in Saving');
+                        }
+                        setTimeout(function(){ LoadEmployees(); }, 1000);
+                        return false;
+                    },
+                    error: function (xhr) {
+                        toastr.error('Server Error!');
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>
+<script>
+    function ClearEmployeesForm() {
+        $('#EmployeesName').val('');
+    }
+</script>

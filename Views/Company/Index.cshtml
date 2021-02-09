@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    ViewBag.active = "ManageCompanies";
+}
+<style>
+    .btn:not([class*='outline']) {
+        color: black !important;
+    }
+</style>
+<section class="py-5">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h6 class="text-uppercase mb-0">Companies</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" onclick="LoadCompanyForm()" title="Add New Company" class="btn btn-outline-primary float-right">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="CompanytblBody"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="_Companyform"></div>
+<script>
+    $(document).ready(function () {
+        LoadCompanies();
+    })
+    function LoadCompanies() {
+        $.ajax({
+            type: 'GET',
+            url: '/Company/GetCompanies',
+            success: function (res) {
+                $('#CompanytblBody').empty().html(res);
+            },
+            error: function () {
+            }
+        })
+    }
+     function LoadCompanyForm() {
+        $.ajax({
+            type: 'GET',
+            url: '/Company/AddCompany',
+            success: function (res) {
+                $('#_Companyform').empty().html(res);
+            }
+        })
+    }
+</script>
+<script>
+    function EditCompany(companyid) {
+        $.ajax({
+            type: 'GET',
+            url: '/Company/GetCompany',
+            data: {
+                CompanyID:companyid
+            },
+            success: function (res) {
+                $('#_Companyform').empty().html(res);
+                $('#mdlAddCompany').modal('show');
+            },
+            error: function () {
+                toastr.error('Error');
+            }
+        })
+    }
+    function DeleteCompany(ID) {
+         swal({
+            title: 'Are you sure ?',
+            text: '',
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "btn-danger",
+            confirmButtonText: 'Yes, delete it!',
+            closeOnConfirm: true,
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Company/DeleteCompany',
+                        data: { CompanyID: ID },
+                        success: function (res) {
+                            if (res == 1) {
+                                toastr.success('Company Deleted');
+                                LoadCompanies();
+                            }
+                            else {
+                                toastr.error('Company Not Deleted');
+                            }
+                        },
+                        error: function (ahx) {
+                            toastr.error('Server error');
+                        }
+                    });
+                }
+            });
+    }
+</script>
+

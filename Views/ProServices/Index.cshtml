@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    ViewBag.active = "ProServices";
+}
+
+
+<section class="py-5">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h6 class="text-uppercase mb-0">Pro Services</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" onclick="LoadProServicesForm()" title="Add Pro Services" class="btn btn-outline-primary float-right">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                            <div id="frmProServices"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="tblProServices"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        LoadProServices();
+    })
+    function LoadProServicesForm() {
+        $.ajax({
+            type: 'GET',
+            url: '/ProServices/AddProServices',
+            success: function (res) {
+                $('#frmProServices').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+    function LoadProServices() {
+        $.ajax({
+            type: 'GET',
+            url: '/ProServices/GetProServices',
+            success: function (res) {
+                $('#tblProServices').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+</script>

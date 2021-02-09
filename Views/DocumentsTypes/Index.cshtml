@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    ViewBag.active = "AddDocumentsTypes";
+}
+
+
+<section class="py-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h6 class="text-uppercase mb-0">Manage Documents Types</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" onclick="LoadDocumentsTypesForm()" title="Add Documents Types" class="btn btn-outline-primary float-right">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                            <div id="frmDocumentsTypes"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="tblDocumentsTypes"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        LoadDocumentsTypes();
+    })
+    function LoadDocumentsTypesForm() {
+        $.ajax({
+            type: 'GET',
+            url: '/DocumentsTypes/AddDocumentsTypes',
+            success: function (res) {
+                $('#frmDocumentsTypes').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+    function LoadDocumentsTypes() {
+        $.ajax({
+            type: 'GET',
+            url: '/DocumentsTypes/GetDocumentsTypes',
+            success: function (res) {
+                $('#tblDocumentsTypes').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+
+    function EditDocumentsTypes(id){
+        $.ajax({
+            type: 'GET',
+            url: '/DocumentsTypes/EditDocumentsTypes',
+            data: {
+                ID:id
+            },
+            success: function (res) {
+                $('#frmDocumentsTypes').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+    function DeleteDocumentsTypes(id){
+        $.ajax({
+            type: 'GET',
+            url: '/DocumentsTypes/DeleteDocumentsTypes',
+            data: {
+                ID:id
+            },
+            success: function (res) {
+                if (res == 1) {
+                    toastr.success('Type Deleted');
+                    LoadDocumentsTypes();
+                } else {
+                    toastr.error('Type Not Deleted');
+                }
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+</script>
+

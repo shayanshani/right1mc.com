@@ -1,0 +1,51 @@
+﻿@model RightOneCRM.Models.Company
+@{
+    ViewBag.Title = "Index";
+    ViewBag.active = "MyCompany";
+}
+
+<section class="py-5">
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card" style="width: inherit;height:500px;margin:10px">
+                <div class="card-header">
+                    <h4 class="float-left">Company Documents</h4>
+                </div>
+                <div class="card-body" style="padding:2px;margin:2px;width:inherit">
+                    <a style="width:inherit;" href="@Url.Action("UploadCompanyDocs","Company",new {CompanyID = Model.CompanyID })">
+                        <img src="~/Content/ICONS/folder.png" style="width:inherit" height="400" />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card" style="width: inherit;height:500px;margin:10px">
+                <div class="card-header">
+                    <h4 class="float-left">Owner Documents</h4>
+                </div>
+                <div class="card-body" style="padding:2px;margin:2px;width:inherit">
+                    <a style="width:inherit" href="@Url.Action("Index","OwnerDocuments",new {CompanyID = Model.CompanyID })">
+                        <img src="~/Content/ICONS/id-card.png" style="width:inherit" height="400" />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card" style="width: inherit;height:500px;margin:10px">
+                <div class="card-header">
+                    <h4 class="float-left">Company Employees</h4>
+                </div>
+                <div class="card-body" style="padding:2px;margin:2px;width:inherit">
+                    <a style="width:inherit" href="@Url.Action("Index","Employees",new {CompanyID = Model.CompanyID })">
+                        <img src="~/Content/ICONS/computer.png" style="width:inherit" height="400" />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+

@@ -1,0 +1,82 @@
+﻿@model List<RightOneCRM.Models.Invoices>
+
+
+    <section class="py-5">
+        <div class="row">
+
+            @foreach (var item in Model)
+            {
+                var Extension = Path.GetExtension(item.Invoice);
+                if (Extension == ".png" || Extension == ".jpg" || Extension == ".jpeg" || Extension == ".gif")
+                {
+                    <div class="col-md-4">
+                        <div class="card" style="width: inherit;height:400px;margin:10px">
+                            <div class="card-header">
+                                <div class="float-right">
+                                    <button onclick="EditInvoices(@item.ID)" title="Edit" class="btn btn-link btnCD">
+                                        <span class="fa fa-edit text-success"></span>
+                                    </button>
+                                    <button onclick="DeleteInvoices(@item.ID)" title="Delete" class="btn btn-link btnCD">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </button>
+                                    <a href="@item.Invoice" title="Download" download>
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body" style="padding:2px;margin:2px;width:inherit;">
+                                <img src='@item.Invoice' style="padding:0;width:inherit;height:300px" class="card-img col-sm-12" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (Extension == ".pdf")
+                {
+                    <div class="col-md-4">
+                        <div class="card" style="width: inherit;height:400px;margin:10px">
+                            <div class="card-header">
+                                <div class="float-right">
+                                    <button onclick="EditInvoices(@item.ID)" title="Edit" class="btn btn-link btnCD">
+                                        <span class="fa fa-edit text-success"></span>
+                                    </button>
+                                    <button onclick="DeleteInvoices(@item.ID)" title="Delete" class="btn btn-link btnCD">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </button>
+                                    <a href="@item.Invoice" title="Download" download>
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body" style="width:inherit;padding:2px;margin:2px">
+                                <embed src="@item.Invoice" type="application/pdf" style="width:inherit" height="300" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-4">
+                        <div class="card" style="width: inherit;height:400px;margin:10px">
+                            <div class="card-header">
+                                <div class="float-right">
+                                    <button onclick="EditInvoices(@item.ID)" title="Edit" class="btn btn-link btnCD">
+                                        <span class="fa fa-edit text-success"></span>
+                                    </button>
+                                    <button onclick="DeleteInvoices(@item.ID)" title="Delete" class="btn btn-link btnCD">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </button>
+                                    <a href="@item.Invoice" title="Download" download>
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body" style="padding:2px;margin:2px">
+                                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@Request.Url.Authority/@item.Invoice'
+                                        class="col-sm-12" height="300" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </section>

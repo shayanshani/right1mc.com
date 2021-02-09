@@ -1,0 +1,102 @@
+﻿@model RightOneCRM.Models.CompanyOwners
+@using RightOneCRM.Models.BL;
+@using RightOneCRM.Models;
+@{ 
+    int CompanyID = 0;
+    if (Model != null)
+    {
+        CompanyID = Model.CompanyID;
+    }
+    BL_Company blCompanies = new BL_Company();
+    var ddlCompanies = blCompanies.ddlGetCompanies();
+}
+<!-- The Modal -->
+@using (Html.BeginForm("AddOwner", "CompanyOwners", FormMethod.Post, new { @id = "OwnersForm", enctype = "multipart/form-data" }))
+{
+    <div class="modal fade" id="mdlSaveOwners" data-backdrop='static' data-keyboard='false'>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Owners Registration Form</h4>
+                    <button type="button" onclick="ClearOwnersForm()" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div>
+                        <div class="form-group">
+                            @Html.LabelFor(x=>x.CompanyID)
+                            @Html.DropDownListFor(x=>x.CompanyID,ddlCompanies,"Select Company",new {@class="form-control" })
+                            @Html.ValidationMessageFor(x=>x.CompanyID,"",new {@class="text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x=>x.OwnerName)
+                            @Html.TextBoxFor(x=>x.OwnerName,new {@class="form-control",@placeholder="Enter Owner Name" })
+                            @Html.ValidationMessageFor(x => x.OwnerName, "", new {@class="text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <input type="submit" form="OwnersForm" id="btnSaveOwners" value="Save" class="btn btn-outline-primary" />
+                    <button type="button" onclick="ClearOwnersForm()" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="~/Scripts/vendor/jquery-validation/jquery.validate.unobtrusive.min.js"></script>
+<!--Saving Admin -->
+<script>
+    $(document).ready(function () {
+        $('#mdlSaveOwners').modal('show');
+        $('#OwnersForm').submit(function (event) {
+            event.preventDefault();
+            var isValid = $(this).validate().form();
+            if (!isValid) return false;
+            else {
+                var formData = new FormData(document.getElementById("OwnersForm"));
+                $.ajax({
+                    url: '/CompanyOwners/AddOwner',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    beforeSend: function () {
+                        $("#btnSaveOwners").attr('disabled', true);
+                        $("#btnSaveOwners").html('Saving&nbsp <i class="fa fa-refresh fa-spin"></i>');
+                    },
+                    success: function (res) {
+                        $("#btnSaveOwners").attr('disabled', false);
+                        $("#btnSaveOwners").html('Save &nbsp<i class="fa fa-bookmark-o"></i>');
+                        $('#OwnersForm')[0].reset();
+                        $('#mdlSaveOwners').modal('hide');
+                        if (res == 1) {
+                            toastr.success('Owner Saved');
+
+                        }
+                        else if (res == 2) {
+                            toastr.success('Owner Updated');
+                        }
+                        else {
+                            toastr.error('Error in Saving');
+                        }
+                        setTimeout(function(){ LoadOwners(); }, 1000);
+                        return false;
+                    },
+                    error: function (xhr) {
+                        toastr.error('Server Error!');
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>
+<script>
+    function ClearOwnersForm() {
+        $('#OwnerName').val('');
+    }
+</script>

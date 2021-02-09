@@ -1,0 +1,27 @@
+﻿@model List<RightOneCRM.Models.DocumentsType>
+
+    <table class="table table-striped table-sm card-text">
+        <thead>
+            <tr>
+                <th>Document Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dt in Model)
+            {
+                <tr>
+                    <td>@dt.DocumentName</td>
+                    <td>
+                        <button onclick="EditDocumentsTypes(@dt.ID)" title="Edit" class="btn btn-link">
+                            <span class="fa fa-edit text-success"></span>
+                        </button> |
+                        <button onclick="DeleteDocumentsTypes(@dt.ID)" title="Delete" class="btn btn-link">
+                            <i class="fa fa-trash text-danger"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+

@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "GetProServicesDocs";
+}
+@{ 
+    int ProID = 0;
+    if (Request.QueryString["ProID"]!=null)
+    {
+        ProID = Convert.ToInt32(Request.QueryString["ProID"]);
+    }
+}
+    <input type="hidden" id="ProID" value="@ProID" />
+<section class="py-5">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h6 class="text-uppercase mb-0">Pro Services Documents</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" onclick="LoadProServicesDocsForm()" title="Add Pro Services" class="btn btn-outline-primary float-right">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                            <div id="frmProServicesDocs"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="tblProServicesDocs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        LoadProServicesDocs();
+    })
+    function LoadProServicesDocsForm() {
+        proId = $('#ProID').val();
+        $.ajax({
+            type: 'GET',
+            url: '/ProServices/ProServicesDocsForm',
+            data: {
+                ProID:proId
+            },
+            success: function (res) {
+                $('#frmProServicesDocs').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+    function LoadProServicesDocs() {
+        proId = $('#ProID').val();
+        $.ajax({
+            type: 'GET',
+            url: '/ProServices/ProServicesDocstbl',
+            data: {
+                ProID:proId
+            },
+            success: function (res) {
+                $('#tblProServicesDocs').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+</script>

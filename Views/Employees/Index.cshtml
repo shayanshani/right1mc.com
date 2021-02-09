@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@{ 
+    int CompanyID = 0;
+    if (Request.QueryString["CompanyID"]!=null)
+    {
+        CompanyID = Convert.ToInt32(Request.QueryString["CompanyID"]);
+    }
+}
+
+<section class="py-5">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h6 class="text-uppercase mb-0">Company Employees</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" onclick="LoadEmployeesForm()" title="Add New Owner" class="btn btn-outline-primary float-right">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                            <div id="frmEmployees"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="tblEmployees"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        LoadEmployees();
+    })
+    function LoadEmployees() {
+        var companyId = @CompanyID;
+        $.ajax({
+            type: 'GET',
+            url: '/Employees/GetEmployees',
+            data: {
+                CompanyID:companyId
+            },
+            success: function (res) {
+                $('#tblEmployees').empty().html(res);
+            }
+        })
+    }
+    function LoadEmployeesForm() {
+        var companyId = @CompanyID;
+        $.ajax({
+            type: 'GET',
+            data: {
+                CompanyID:companyId
+            },
+            url: '/Employees/AddEmployees',
+            success: function (res) {
+                $('#frmEmployees').empty().html(res);
+            }
+        })
+    }
+</script>
+

@@ -1,0 +1,95 @@
+﻿@model List<RightOneCRM.Models.CompanyDocuments>
+<style>
+    .btnCD{
+        margin:5px;
+        padding:5px;
+    }
+</style>
+<section class="py-5">
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            var Extension = Path.GetExtension(item.Documents);
+            if (Extension == ".png" || Extension == ".jpg" || Extension == ".jpeg" || Extension == ".gif")
+            {
+                <div class="col-md-4">
+                    <div class="card" style="width: inherit;height:400px;margin:10px">
+                        <div class="card-header">
+                            <h6 class="float-left">@item.DocumentName</h6>
+                            <div class="float-right">
+                                <button onclick="EditDocsCompany(@item.ID)" title="Edit" class="btn btn-link btnCD">
+                                    <span class="fa fa-edit text-success"></span>
+                                </button>
+                                <button onclick="DeleteCompanyDocs(@item.ID)" title="Delete" class="btn btn-link btnCD">
+                                    <i class="fa fa-trash text-danger"></i>
+                                </button>
+                                <a href="@item.Documents" title="Download" download>
+                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding:2px;margin:2px">
+                            <img src='@item.Documents' style="padding:0" class="card-img col-sm-12" />
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Extension == ".pdf")
+            {
+                <div class="col-md-4">
+                    <div class="card" style="width: inherit;height:400px;margin:10px">
+                        <div class="card-header">
+                            <h6 class="float-left">@item.DocumentName</h6>
+                            <div class="float-right">
+                                <button onclick="EditDocsCompany(@item.ID)" title="Edit" class="btn btn-link btnCD">
+                                    <span class="fa fa-edit text-success"></span>
+                                </button>
+                                <button onclick="DeleteCompanyDocs(@item.ID)" title="Delete" class="btn btn-link btnCD">
+                                    <i class="fa fa-trash text-danger"></i>
+                                </button>
+                                <a href="@item.Documents" title="Download" download>
+                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding:2px;margin:2px;width:inherit">
+                           <embed src="@item.Documents" type="application/pdf" style="width:inherit" height="300" />
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-4">
+                    <div class="card" style="width: inherit;height:400px;margin:10px">
+                        <div class="card-header">
+                            <h6 class="float-left">@item.DocumentName</h6>
+                            <div class="float-right">
+                                <button onclick="EditDocsCompany(@item.ID)" title="Edit" class="btn btn-link btnCD">
+                                    <span class="fa fa-edit text-success"></span>
+                                </button>
+                                <button onclick="DeleteCompanyDocs(@item.ID)" title="Delete" class="btn btn-link btnCD">
+                                    <i class="fa fa-trash text-danger"></i>
+                                </button>
+                                <a href="@item.Documents" title="Download" download>
+                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding:2px;margin:2px">
+                            <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@Request.Url.Authority/@item.Documents'
+                                   style="width: inherit;"  class="col-sm-12" height="300" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>
+@*<iframe src="https://docs.google.com/gview?url=https://path.com/to/your/pdf.pdf&embedded=true" style="width:600px; height:500px;" frameborder="0"></iframe>*@
+
+@*<object data="data/test.pdf" type="application/pdf" width="300" height="200">
+        <a href="data/test.pdf">test.pdf</a>
+    </object>*@
+

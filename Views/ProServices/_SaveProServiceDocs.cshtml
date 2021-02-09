@@ -1,0 +1,77 @@
+﻿
+@model RightOneCRM.Models.ProServiceDocs
+<link href="~/Content/File_Upload/jquery.growl.css" rel="stylesheet" />
+    <link href="~/Content/File_Upload/fileup.min.css" rel="stylesheet" />
+<!-- The Modal -->
+@using (Html.BeginForm("SaveProServicesDocs", "ProServices", FormMethod.Post, new { @id = "ProDocsForm", enctype = "multipart/form-data" }))
+{
+    <div class="modal fade" id="mdlProServicesDocs" data-backdrop='static' data-keyboard='false'>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Pro Documents Form</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div>
+                        <div class="form-group">
+                            <div class="row" id="uploadparent">
+                                <div class="column">
+                                    <button type="button" class="btn btn-success fileup-btn">
+                                        Select files
+                                        <input type="file" id="upload-2" multiple>
+                                    </button>
+                                    <a class="control-button btn btn-link" style="display: none"
+                                       href="javascript:$.fileup('upload-2', 'remove', '*')">Remove all</a>
+                                    <div id="upload-2-queue" class="queue"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <a class="control-button btn btn-primary"
+                       href="javascript:$.fileup('upload-2', 'upload', '*')">Upload all</a>
+                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/vendor/File_Upload/jquery.growl.js"></script>
+<script src="~/Scripts/vendor/File_Upload/fileup.min.js"></script>
+
+<!--Saving ProServices -->
+
+<script>
+    $(document).ready(function () {
+        $('#mdlProServicesDocs').modal('show');
+    })
+    function UploadAttachements() {
+        $.fileup('upload-2', 'upload', '*');
+    }
+    $.fileup({
+        url: '/ProServices/AddProDocs',
+        inputID: 'upload-2',
+        dropzoneID: 'upload-2-dropzone',
+        queueID: 'upload-2-queue',
+        onSelect: function (file) {
+            $('#EmployeeForm .control-button').show();
+        },
+        onRemove: function (file, total) {
+            if (file === '*' || total === 1) {
+                $('#EmployeeForm .control-button').hide();
+            }
+        },
+        onSuccess: function (response, file_number, file) {
+            $.growl.notice({ title: "Upload success!", message: file.name });
+            LoadProServicesDocs();
+        },
+        onError: function (event, file, file_number) {
+            $.growl.error({ message: "Upload error!" });
+        }
+    });
+</script>

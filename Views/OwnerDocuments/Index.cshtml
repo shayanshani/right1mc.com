@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Owner Documents";
+}
+@{ 
+    int CompanyID = 0;
+    if (Request.QueryString["CompanyID"]!=null)
+    {
+        CompanyID = Convert.ToInt32(Request.QueryString["CompanyID"]);
+    }
+}
+
+    <section class="py-5">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h6 class="text-uppercase mb-0">Owner Documents</h6>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="button" onclick="LoadOwnerDocsForm()" title="Add Owner Documents" class="btn btn-outline-primary float-right">
+                                    <span class="fa fa-plus"></span>
+                                </button>
+                                <div id="frmOwnerDocuments"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="tblOwnerDocuments"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<script>
+    $(document).ready(function () {
+        LoadOwnerDocuments();
+    })
+    function LoadOwnerDocuments() {
+        var companyId = @CompanyID;
+        $.ajax({
+            type: 'GET',
+            url: '/OwnerDocuments/GetOwnerDocuments',
+            data: {
+                CompanyID:companyId
+            },
+            success: function (res) {
+                $('#tblOwnerDocuments').empty().html(res);
+            }
+        })
+    }
+    function LoadOwnerDocsForm() {
+        var companyId = @CompanyID;
+        $.ajax({
+            type: 'GET',
+            url: '/OwnerDocuments/SaveOwnerDocuments',
+            data: {
+                CompanyID:companyId
+            },
+            success: function (res) {
+                $('#frmOwnerDocuments').empty().html(res);
+            }
+        })
+    }
+</script>

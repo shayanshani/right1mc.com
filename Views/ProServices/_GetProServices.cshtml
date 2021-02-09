@@ -1,0 +1,40 @@
+﻿@model List<RightOneCRM.Models.ProServices>
+    <section class="py-5">
+        <style>
+            .btn {
+                padding: 12px !important;
+            }
+        </style>
+        <div class="row">
+            @foreach (var pro in Model)
+            {
+                var CImg = pro.Picture;
+                if (string.IsNullOrEmpty(CImg))
+                {
+                    CImg = "/Content/img/no-image-icon-1.jpg";
+                }
+                <div class="col-lg-2 col-md-4 mb-5">
+                    <div class="card" style="width: inherit;">
+                        <div class="card-header">
+                            <h6>@pro.ProName</h6>
+                        </div>
+                        <img class="card-img-top" src="@CImg" height="180" alt="Card image cap">
+                        <div class="card-body">
+                            <div class="row">
+                                <button onclick="EditCompany(@pro.ProID)" title="Edit" class="btn btn-link">
+                                    <span class="fa fa-edit text-success"></span>
+                                </button>
+                                <button onclick="DeleteCompany(@pro.ProID)" title="Delete" class="btn btn-link">
+                                    <i class="fa fa-trash text-danger"></i>
+                                </button>
+                                <a href="@Url.Action("GetProServicesDocs","ProServices",new {ProID = pro.ProID })" class="btn btn-link" title="Pro Documents">
+                                    <span class="fa fa-book text-success"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </section>

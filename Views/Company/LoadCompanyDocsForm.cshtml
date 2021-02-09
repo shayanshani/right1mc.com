@@ -1,0 +1,98 @@
+﻿@model RightOneCRM.Models.ViewModels.CompanyDocumentsViewModel
+
+<!-- The Modal -->
+@using (Html.BeginForm("AddCompanyDocs", "Company", FormMethod.Post, new { @id = "CompanyDocsForm", enctype = "multipart/form-data" }))
+{
+    <div class="modal fade" id="mdlAddCompanyDocs" data-backdrop='static' data-keyboard='false'>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Company Documents Form</h4>
+                    <button type="button" onclick="ClearCompanyDocsForm()" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    @Html.HiddenFor(x=>x.CompanyDocuments.CompanyID)
+                    <div>
+                        <div class="form-group">
+                            @Html.DropDownListFor(x=>x.CompanyDocuments.DocumentTypeID,Model.DocumentsTypes,"Select Document Type",new {@class="form-control" })
+                            @*@Html.DropDownList("DocumentTypeID", Model.DocumentsTypes,"Select Document Type", new { })*@
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="Docs" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <input type="submit" form="CompanyDocsForm" id="btnSaveCompanyDocs" value="Save" class="btn btn-outline-primary" />
+                    <button type="button" onclick="ClearCompanyDocsForm()" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="~/Scripts/vendor/jquery-validation/jquery.validate.unobtrusive.min.js"></script>
+<!--Saving Admin -->
+<script>
+    $(document).ready(function () {
+        $('#mdlAddCompanyDocs').modal('show');
+        $('#CompanyDocsForm').submit(function (event) {
+            debugger;
+            event.preventDefault();
+            var ddlDocsTypeID = $('#CompanyDocuments_DocumentTypeID').val();
+            if (ddlDocsTypeID !="" && ddlDocsTypeID != undefined) {
+                 var isValid = $(this).validate().form();
+            if (!isValid) return false;
+            else {
+                formData = new FormData(document.getElementById("CompanyDocsForm"));
+                $.ajax({
+                    url: '/Company/UploadCompanyDocs',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    beforeSend: function () {
+                        $("#btnSaveCompanyDocs").attr('disabled', true);
+                        $("#btnSaveCompanyDocs").html('Saving&nbsp <i class="fa fa-refresh fa-spin"></i>');
+                    },
+                    success: function (res) {
+                        $("#btnSaveCompanyDocs").attr('disabled', false);
+                        $("#btnSaveCompanyDocs").html('Save &nbsp<i class="fa fa-bookmark-o"></i>');
+                        $('#CompanyDocsForm')[0].reset();
+                        $('#mdlAddCompanyDocs').modal('hide');
+                        if (res == 1) {
+                            toastr.success('Company Document Saved');
+                        }
+                        else if (res == 2) {
+                            toastr.success('Company Document Updated');
+                        }
+                        else {
+                            toastr.error('Error in Saving');
+                        }
+                        setTimeout(function(){ LoadCompaniesDocs(); }, 1000);
+                        return false;
+                    },
+                    error: function (xhr) {
+                        toastr.error('Server Error!');
+                    }
+                });
+            }
+            }
+            else {
+                toastr.error('Please Select Documents Type');
+            }
+            return false;
+        });
+    });
+</script>
+<script>
+    function ClearCompanyDocsForm() {
+        $('#ID').val('');
+        $('#Documents').val('');
+    }
+</script>

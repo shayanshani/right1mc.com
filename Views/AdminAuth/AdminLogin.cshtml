@@ -1,0 +1,101 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RIGHT ONE MANAGEMENT CONSULTANCY</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="~/Scripts/vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <!-- Google fonts - Popppins for copy-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,800">
+    <!-- orion icons-->
+    <link rel="stylesheet" href="~/Content/css/orionicons.css">
+    <link href="~/Content/css/sweetalert.css" rel="stylesheet" />
+    <link href="~/Content/css/toastr.min.css" rel="stylesheet" />
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="~/Content/css/style.blue.css" id="theme-stylesheet">
+    @*<link rel="stylesheet" href="~/Content/css/style.default.css" id="theme-stylesheet">
+        <link rel="stylesheet" href="~/Content/css/style.green.css" id="theme-stylesheet">
+        <link rel="stylesheet" href="~/Content/css/style.pink.css" id="theme-stylesheet">
+        <link rel="stylesheet" href="~/Content/css/style.red.css" id="theme-stylesheet">
+        <link rel="stylesheet" href="~/Content/css/style.sea.css" id="theme-stylesheet">
+        <link rel="stylesheet" href="~/Content/css/style.violet.css" id="theme-stylesheet">*@
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="~/Content/css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="~/Content/img/RIGHT ONE MANAGEMENT CONSULTANCY final logo.png">
+</head>
+<body>
+    <script src="~/Scripts/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Scripts/SweetAlert.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <div class="page-holder d-flex align-items-center">
+        <div class="container">
+            
+            <div class="row align-items-center py-5">
+                <div class="col-5 col-lg-7 mx-auto mb-5 mb-lg-0">
+                    <div class="pr-lg-5"><img src="/Content/img/RIGHT ONE MANAGEMENT CONSULTANCY final logo.png" alt="" class="img-fluid"></div>
+                </div>
+                <div class="col-lg-5 px-lg-4">
+                    <h1 class="text-base text-primary text-uppercase mb-4">RIGHT ONE MANAGEMENT CONSULTANCY</h1>
+                    <h2 class="mb-4">Welcome back!</h2>
+                    <form id="loginForm" class="mt-4">
+                        <div class="form-group mb-4">
+                            <input type="text" id="AdminEmail" placeholder="Username or Email address" class="form-control border-0 shadow form-control-lg">
+                        </div>
+                        <div class="form-group mb-4">
+                            <input type="password" id="AdminPassword" placeholder="Password" class="form-control border-0 shadow form-control-lg text-violet">
+                        </div>
+                        <div class="form-group mb-4">
+                            <button type="button" id="btnLogin" class="btn btn-primary shadow px-5">Log in</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#btnLogin').click(function () {
+            var AdminEmail = $('#AdminEmail').val();
+            var AdminPassword = $('#AdminPassword').val();
+            if (AdminEmail.trim() !="" && AdminPassword.trim()!="") {
+                $.ajax({
+                    type: 'POST',
+                    url: '/AdminAuth/AdminLogin',
+                    data: {
+                        Email: AdminEmail,
+                        Password:AdminPassword
+                    },
+                    success: function (res) {
+                        if (res == 1) {
+                            window.location.href = "@Url.Action("Index","Home")";
+                        }
+                        else {
+                            toastr.error('Please Enter Correct Email & Password');
+                        }
+                    },
+                    error: function () {
+                        toastr.error('Server Error');
+                    }
+                })
+            }
+            else {
+                toastr.error('Please Enter Email & Password');
+            }
+        })
+    </script>
+    <!-- JavaScript files-->
+    <script src="~/Scripts/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/js/front.js"></script>
+</body>
+</html>

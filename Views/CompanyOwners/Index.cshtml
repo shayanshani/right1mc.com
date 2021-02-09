@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    ViewBag.active = "CompanyOwners";
+}
+
+
+<section class="py-5">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h6 class="text-uppercase mb-0">Company Owner</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" onclick="LoadOwnersForm()" title="Add New Owner" class="btn btn-outline-primary float-right">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                            <div id="frmOwner"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="tblOwners"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        LoadOwners();
+    })
+    function LoadOwners() {
+        $.ajax({
+            type: 'GET',
+            url: '/CompanyOwners/GetOwners',
+            success: function (res) {
+                $('#tblOwners').empty().html(res);
+            }
+        })
+    }
+    function LoadOwnersForm() {
+        $.ajax({
+            type: 'GET',
+            url: '/CompanyOwners/AddOwner',
+            success: function (res) {
+                $('#frmOwner').empty().html(res);
+            }
+        })
+    }
+</script>

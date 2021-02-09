@@ -1,0 +1,86 @@
+﻿@model List<RightOneCRM.Models.ProServiceDocs>
+    <section class="py-5">
+        <style>
+            .btn {
+                padding: 12px !important;
+            }
+        </style>
+            <div class="row">
+
+                @foreach (var item in Model)
+                {
+                    var Extension = Path.GetExtension(item.ProDocs);
+                    if (Extension == ".png" || Extension == ".jpg" || Extension == ".jpeg" || Extension == ".gif")
+                    {
+                        <div class="col-md-4">
+                            <div class="card" style="width: inherit;height:400px;margin:10px">
+                                <div class="card-header">
+                                    <div class="float-right">
+                                        <button onclick="EditDocsCompany(@item.ProID)" title="Edit" class="btn btn-link btnCD">
+                                            <span class="fa fa-edit text-success"></span>
+                                        </button>
+                                        <button onclick="DeleteCompanyDocs(@item.ProID)" title="Delete" class="btn btn-link btnCD">
+                                            <i class="fa fa-trash text-danger"></i>
+                                        </button>
+                                        <a href="@item.ProDocs" title="Download" download>
+                                            <i class="fa fa-download" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="width: inherit;padding:2px;margin:2px">
+                                    <img src='@item.ProDocs' style="width: inherit;padding:0" height="300" class="card-img col-sm-12" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (Extension == ".pdf")
+                    {
+                        <div class="col-md-4">
+                            <div class="card" style="width: inherit;height:400px;margin:10px">
+                                <div class="card-header">
+                                    <div class="float-right">
+                                        <button onclick="EditDocsCompany(@item.ProID)" title="Edit" class="btn btn-link btnCD">
+                                            <span class="fa fa-edit text-success"></span>
+                                        </button>
+                                        <button onclick="DeleteCompanyDocs(@item.ProID)" title="Delete" class="btn btn-link btnCD">
+                                            <i class="fa fa-trash text-danger"></i>
+                                        </button>
+                                        <a href="@item.ProDocs" title="Download" download>
+                                            <i class="fa fa-download" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="width: inherit;padding:2px;margin:2px">
+                                    <embed src="@item.ProDocs" type="application/pdf" style="width: inherit;" height="300" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-4">
+                            <div class="card" style="width: inherit;height:400px;margin:10px">
+                                <div class="card-header">
+                                    <div class="float-right">
+                                        <button onclick="EditDocsCompany(@item.ProID)" title="Edit" class="btn btn-link btnCD">
+                                            <span class="fa fa-edit text-success"></span>
+                                        </button>
+                                        <button onclick="DeleteCompanyDocs(@item.ProID)" title="Delete" class="btn btn-link btnCD">
+                                            <i class="fa fa-trash text-danger"></i>
+                                        </button>
+                                        <a href="@item.ProDocs" title="Download" download>
+                                            <i class="fa fa-download" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="width: inherit;padding:2px;margin:2px">
+                                    <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@Request.Url.Authority/@item.ProDocs'
+                                          style="width: inherit;" height="300" frameborder="0"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+    </section>

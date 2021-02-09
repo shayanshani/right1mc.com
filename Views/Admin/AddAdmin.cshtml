@@ -1,0 +1,131 @@
+﻿@model RightOneCRM.Models.Admin
+<!-- The Modal -->
+@using (Html.BeginForm("AddAdmin", "Admin", FormMethod.Post, new { @id = "AdminForm", enctype = "multipart/form-data" }))
+{
+    <div class="modal fade" id="mdlAddAdmin"  data-backdrop='static' data-keyboard='false'>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Admin Registration Form</h4>
+                    <button type="button" onclick="ClearForm()" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div>
+
+                        @Html.HiddenFor(x=>x.AdminID)
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.FirstName)
+                            @Html.TextBoxFor(x => x.FirstName, new { @placeholder = "First Name", @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.FirstName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.LastName)
+                            @Html.TextBoxFor(x => x.LastName, new { @placeholder = "Last Name", @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.LastName, "", new { @class = "text-danger" })
+                        </div>
+
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Email)
+                            @Html.TextBoxFor(x => x.Email, new { @placeholder = "Email Address", @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ContactNo)
+                            @Html.TextBoxFor(x => x.ContactNo, new { @placeholder = "Contact No", @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.ContactNo, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Password)
+                            @Html.TextBoxFor(x => x.Password, new { @placeholder = "Password", @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <input type="file" name="Photo" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            @Html.CheckBoxFor(x => x.IsSuperAdmin) @Html.LabelFor(x => x.IsSuperAdmin)
+                            @Html.ValidationMessageFor(x => x.IsSuperAdmin, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <input type="submit" form="AdminForm" id="btnSaveAdmin" value="Save" class="btn btn-outline-primary" />
+                    <button type="button" onclick="ClearForm()" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="~/Scripts/vendor/jquery-validation/jquery.validate.unobtrusive.min.js"></script>
+<!--Saving Admin -->
+<script>
+    $(document).ready(function () {
+        $('#mdlAddAdmin').modal('show');
+        $('#AdminForm').submit(function (event) {
+            event.preventDefault();
+            var isValid = $(this).validate().form();
+            if (!isValid) return false;
+            else {
+                var formData = new FormData(document.getElementById("AdminForm"));
+                $.ajax({
+                    url: '/Admin/AddAdmin',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    beforeSend: function () {
+                        $("#btnSaveAdmin").attr('disabled', true);
+                        $("#btnSaveAdmin").html('Saving&nbsp <i class="fa fa-refresh fa-spin"></i>');
+                    },
+                    success: function (res) {
+                        $("#btnSaveAdmin").attr('disabled', false);
+                        $("#btnSaveAdmin").html('Save &nbsp<i class="fa fa-bookmark-o"></i>');
+                        $('#AdminForm')[0].reset();
+                        $('#mdlAddAdmin').modal('hide');
+                        if (res == 1) {
+                            toastr.success('Admin Saved');
+
+                        }
+                        else if (res == 2) {
+                            toastr.success('Admin Updated');
+                        }
+                        else {
+                            toastr.error('Error in Saving');
+                        }
+                        setTimeout(function(){ LoadAdmins(); }, 1000);
+                        return false;
+                    },
+                    error: function (xhr) {
+                        toastr.error('Server Error!');
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>
+<script>
+    function ClearForm() {
+        $('#AdminID').val('');
+        $('#FirstName').val('');
+        $('#LastName').val('');
+        $('#Email').val('');
+        $('#Password').val('');
+        $('#ContactNo').val('');
+    }
+</script>

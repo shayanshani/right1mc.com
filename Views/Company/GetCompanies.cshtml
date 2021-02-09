@@ -1,0 +1,45 @@
+﻿
+@model List<RightOneCRM.Models.Company>
+    <style>
+        .btn{
+            padding:12px !important;
+        }
+    </style>
+<div class="row">
+    @foreach (var com in Model)
+    {
+        var CImg = com.CompanyLogo;
+        if (string.IsNullOrEmpty(CImg))
+        {
+            CImg = "/Content/img/no-image-icon-1.jpg";
+        }
+    <div class="col-lg-2 col-md-4">
+        <div class="card" style="width: inherit;">
+            <div class="card-header">
+                <h6>@com.CompanyName</h6>
+            </div>
+            <img class="card-img-top" src="@CImg" height="180" alt="Card image cap">
+            <div class="card-body">
+                <div class="row">
+                    <button onclick="EditCompany(@com.CompanyID)" title="Edit" class="btn btn-link">
+                        <span class="fa fa-edit text-success"></span>
+                    </button> 
+                    <button onclick="DeleteCompany(@com.CompanyID)" title="Delete" class="btn btn-link">
+                        <i class="fa fa-trash text-danger"></i>
+                    </button>
+                        <a href="@Url.Action("UploadCompanyDocs","Company",new {CompanyID = com.CompanyID })" class="btn btn-link" title="Company Documents">
+                            <span class="fa fa-book text-success"></span>
+                        </a>
+                        <a href="@Url.Action("Index","OwnerDocuments",new {CompanyID = com.CompanyID })" class="btn btn-link" title="Owner Documents">
+                            <span class="fa fa-user text-success"></span>
+                        </a>
+                        <a href="@Url.Action("Index","Employees",new {CompanyID = com.CompanyID })" class="btn btn-link" title="Company Employees">
+                            <span class="fa fa-users text-success"></span>
+                        </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    
+    </div>

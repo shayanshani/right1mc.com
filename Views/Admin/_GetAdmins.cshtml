@@ -1,0 +1,33 @@
+﻿@model List<RightOneCRM.Models.Admin>
+<table class="table table-striped table-sm card-text">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Contact No</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var admin in Model.Select((value, i) => new { i, value }))
+        {
+            <tr>
+                <th scope="row">@admin.i</th>
+                <td>@admin.value.FirstName</td>
+                <td>@admin.value.LastName</td>
+                <td>@admin.value.Email</td>
+                <td>@admin.value.ContactNo</td>
+                <td>
+                    <button onclick="EditAdmin(@admin.value.AdminID)" title="Edit" class="btn btn-link">
+                        <span class="fa fa-edit text-success"></span>
+                    </button> | 
+                    <button onclick="DeleteAdmin(@admin.value.AdminID)" title="Delete" class="btn btn-link">
+                        <i class="fa fa-trash text-danger"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

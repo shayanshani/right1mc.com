@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    ViewBag.active = "Invoices";
+}
+
+
+<section class="py-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h6 class="text-uppercase mb-0">Companies Invoices</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" onclick="LoadInvoicesForm()" title="Add Invoices" class="btn btn-outline-primary float-right">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                            <div id="frmInvoices"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="tblInvoices"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        LoadInvoices();
+    })
+    function LoadInvoicesForm() {
+        $.ajax({
+            type: 'GET',
+            url: '/Invoices/AddInvoices',
+            success: function (res) {
+                $('#frmInvoices').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+    function LoadInvoices() {
+        $.ajax({
+            type: 'GET',
+            url: '/Invoices/GetInvoices',
+            success: function (res) {
+                $('#tblInvoices').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+    function EditInvoices(id){
+        $.ajax({
+            type: 'GET',
+            url: '/Invoices/EditInvoices',
+            data: {
+                ID:id
+            },
+            success: function (res) {
+                $('#frmInvoices').html(res);
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+    }
+    function DeleteInvoices(id){
+           swal({
+            title: 'Are you sure ?',
+            text: '',
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "btn-danger",
+            confirmButtonText: 'Yes, delete it!',
+            closeOnConfirm: true,
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+                     $.ajax({
+            type: 'GET',
+            url: '/Invoices/DeleteInvoices',
+            data: {
+                ID:id
+            },
+            success: function (res) {
+                if (res == 1) {
+                    toastr.success('Invoice Deleted');
+                    LoadInvoices();
+                } else {
+                    toastr.error('Invoice Not Deleted');
+                }
+            },
+            error: function () {
+                toastr.error('Server Error');
+            }
+        })
+                }
+            });
+    }
+</script>
+
